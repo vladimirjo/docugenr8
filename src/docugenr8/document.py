@@ -262,7 +262,8 @@ class Page:
         self,
         content: object,
     ) -> None:
-        self.__core_page.add_content(content)
+        if isinstance(content, TextArea):
+            self.__core_page.add_content(content.__core_text_area)
 
 
 class DocAttributes:
