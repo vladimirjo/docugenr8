@@ -10,6 +10,7 @@ from collections.abc import Callable
 from docugenr8_core import Document as CoreDocument
 from docugenr8_core.page import Page as CorePage
 from docugenr8_core.settings import Settings as CoreSettings
+from docugenr8_core.text_area import TextArea as CoreTextArea
 from docugenr8_pdf.pdf import Pdf
 
 
@@ -263,7 +264,7 @@ class Page:
         content: object,
     ) -> None:
         if isinstance(content, TextArea):
-            self.__core_page.add_content(content.__core_text_area)
+            self.__core_page.add_content(content._get_core())
 
 
 class DocAttributes:
@@ -283,6 +284,9 @@ class TextArea:
         core_document: CoreDocument,
     ) -> None:
         self.__core_text_area = core_document.create_textarea(x, y, width, height)
+
+    def _get_core(self) -> CoreTextArea:
+        return self.__core_text_area
 
     def add_text(
         self,
