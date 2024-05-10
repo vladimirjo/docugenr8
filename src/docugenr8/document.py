@@ -258,6 +258,12 @@ class Page:
     def height(self, height: float):
         self.__core_page._height = height
 
+    def add_content(
+        self,
+        content: object,
+    ) -> None:
+        self.__core_page.add_content(content)
+
 
 class DocAttributes:
     def __init__(
