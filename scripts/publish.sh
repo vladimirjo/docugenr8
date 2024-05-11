@@ -1,23 +1,28 @@
 #!/bin/bash
 
-# Define a function
+# Define a success message
 success() {
-    local prefix1="\e[1;32m"
-    local prefix2="========================================\n"
-    local sufix1="\n========================================"
-    local sufix2="\e[0m"
-    local result="${prefix1}${prefix2}$1${sufix1}${sufix2}"
+    local prefix="\e[1;32m========================================\n\e[1;32m"
+    local sufix="\n\e[1;32m========================================\e[0m"
+    local result="${prefix}$1${sufix}"
     echo "$result"
 }
 
-# Define a function
+# Define a warning message
 warning() {
-    local prefix1="\e[1;31m"
-    local prefix2="========================================\n"
-    local sufix1="\n========================================"
-    local sufix2="\e[0m"
-    local result="${prefix1}${prefix2}$1${sufix1}${sufix2}"
+    local prefix="\e[1;31m========================================\n\e[1;31m"
+    local sufix="\n\e[1;31m========================================\e[0m"
+    local result="${prefix}$1${sufix}"
     echo "$result"
+}
+
+# Function to check if .venv directory exists
+check_venv() {
+    if [ -d ".venv" ]; then
+        return 0  # True, directory exists
+    else
+        return 1  # False, directory does not exist
+    fi
 }
 
 # Run pypi_env.sh
@@ -38,10 +43,12 @@ source ./scripts/version.sh
 if [ $? -eq 0 ]; then
     echo -e "$(success "Package version can be published on PyPI")"
 
-    # Activate virtual environment to run build inside
-    source .venv/bin/activate
-    echo -e "$(success "Virtual environment is activated")"
-
+    # Activate virtual environment to run build inside if needed
+    check_venv
+    if [ $? -eq 0 ]; then
+        source .venv/bin/activate
+        echo -e "$(success "Virtual environment is activated")"
+    fi
 
     # Clean build and dist directories
     ./scripts/clean.sh
@@ -54,7 +61,13 @@ if [ $? -eq 0 ]; then
 
     echo -e "$(success "Publishing package on PyPI")"
     twine upload dist/* --username=__token__ --password="$PROD_PYPI_TOKEN"
-    deactivate
+
+    # Deactivate virtual environment to run build inside if needed
+    check_venv
+    if [ $? -eq 0 ]; then
+        deactivate
+        echo -e "$(success "Virtual environment is deactivated")"
+    fi
 else
     echo -e "$(warning "Package version exists already on PyPI")"
 fi
