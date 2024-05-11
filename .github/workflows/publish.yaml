@@ -33,3 +33,5 @@ jobs:
 
             - name: Publish Package
               run: bash $GITHUB_WORKSPACE/scripts/publish.sh
+              env:
+                  PROD_PYPI_TOKEN: ${{ secrets.PROD_PYPI_TOKEN }}
