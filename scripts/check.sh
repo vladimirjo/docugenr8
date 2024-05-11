@@ -30,7 +30,7 @@ check_venv
 if [ $? -eq 0 ]; then
     source .venv/bin/activate
 else
-    echo ".venv directory is not present. Create a virtual environment first."
+    echo ".venv directory is not present."
 fi
 
 check_result=0
@@ -79,13 +79,13 @@ check_venv
 if [ $? -eq 0 ]; then
     deactivate
 else
-    echo ".venv directory is not present. Create a virtual environment first."
+    echo ".venv directory is not present."
 fi
 
 if [ "$check_result" -eq 0 ]; then
-    echo -e "\e[1;32mCode Check successful.\e[0m"
+    echo -e "$(success "Code Check successful.")"
     exit 0
 else
-    echo -e "\e[1;31mCode Check failed.\e[0m"
+    echo -e "$(warning "Code Check failed.")"
     exit 1
 fi
