@@ -56,8 +56,8 @@ fi
 
 if [ "$check_result" -eq 0 ]; then
     echo -e "\e[1;32mCode Check successful.\e[0m"
-    return 0
+    echo 0
 else
     echo -e "\e[1;31mCode Check failed.\e[0m"
-    return 1
+    echo 1
 fi
