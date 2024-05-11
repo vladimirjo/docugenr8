@@ -28,21 +28,24 @@ jobs:
                   python -m pip install --upgrade pip
                   python -m pip install -e ".[dev]"
 
-            - name: Run Lint
-              run: ruff check
-              continue-on-error: true
+            - name: Run Code Check
+              run: bash $GITHUB_WORKSPACE/scripts/check.sh
 
-            - name: Run Format
-              run: ruff format --check
-              continue-on-error: true
+            # - name: Run Lint
+            #   run: ruff check
+            #   continue-on-error: true
 
-            - name: Run Type Check
-              run: mypy src/
-              continue-on-error: true
+            # - name: Run Format
+            #   run: ruff format --check
+            #   continue-on-error: true
 
-            - name: Run Tests
-              run: pytest --cov=docugenr8 tests/
-              continue-on-error: true
+            # - name: Run Type Check
+            #   run: mypy src/
+            #   continue-on-error: true
 
-            - name: Check Version
-              run: bash $GITHUB_WORKSPACE/scripts/version.sh
+            # - name: Run Tests
+            #   run: pytest --cov=docugenr8 tests/
+            #   continue-on-error: true
+
+            # - name: Check Version
+            #   run: bash $GITHUB_WORKSPACE/scripts/version.sh

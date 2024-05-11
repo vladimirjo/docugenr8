@@ -8,7 +8,6 @@ package_name="docugenr8"
 
 # Fetch package versions from Test PyPI
 versions=$(curl -sSL https://pypi.org/simple/${package_name}/ | grep -o '<a [^>]*>.*</a>' | sed -e 's/<[^>]*>//g')
-echo $versions
 
 # Check if version exists
 if echo "$versions" | grep -q "$version"; then
