@@ -29,6 +29,6 @@ jobs:
                   python -m pip install -e ".[dev]"
 
             - name: Publish Package
-              run: bash $GITHUB_WORKSPACE/scripts/publish.sh
+              run: bash $GITHUB_WORKSPACE/run.sh publish
               env:
                   PROD_PYPI_TOKEN: ${{ secrets.PROD_PYPI_TOKEN }}

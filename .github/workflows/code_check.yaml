@@ -29,23 +29,4 @@ jobs:
                   python -m pip install -e ".[dev]"
 
             - name: Run Code Check
-              run: bash $GITHUB_WORKSPACE/scripts/check.sh
-
-            # - name: Run Lint
-            #   run: ruff check
-            #   continue-on-error: true
-
-            # - name: Run Format
-            #   run: ruff format --check
-            #   continue-on-error: true
-
-            # - name: Run Type Check
-            #   run: mypy src/
-            #   continue-on-error: true
-
-            # - name: Run Tests
-            #   run: pytest --cov=docugenr8 tests/
-            #   continue-on-error: true
-
-            # - name: Check Version
-            #   run: bash $GITHUB_WORKSPACE/scripts/version.sh
+              run: bash $GITHUB_WORKSPACE/run.sh check
