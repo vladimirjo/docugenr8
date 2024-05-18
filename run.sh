@@ -1,11 +1,20 @@
 #!/bin/bash
+#
+# Script Name: run.sh
+# Description: This script checks the code quality and publishes the package to PYPI
+# Author: Vladimir Jovanovic
+# Date: 2024-05-18
+# Version: 1.0
+# Usage: ./run.sh {check|publish}
+# Dependencies: None
+# License: MIT License
+#
 
-# MAIN_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )
 FILE_VERSION=$(sed 's/[^0-9.]//g' "./version.txt")
 PACKAGE_NAME="docugenr8"
 PYPI_FILE=".pypi"
 
-# Define a success message
+# Standard success message
 success() {
     local prefix="\e[1;32m"
     local sufix="\e[0m"
@@ -13,7 +22,7 @@ success() {
     echo -e "$result"
 }
 
-# Define a warning message
+# Standard warning message
 warning() {
     local prefix="\e[1;31m"
     local sufix="\e[0m"
@@ -21,7 +30,7 @@ warning() {
     echo -e "$result"
 }
 
-# Define a warning message
+# Standard failure message
 failure() {
     local prefix="\e[1;31m"
     local sufix="\e[0m"
@@ -38,6 +47,7 @@ check_venv() {
     fi
 }
 
+# Function to remove build and dist directories if they exists
 remove_build_and_dist() {
     if [ -e "./build" ]; then
         success "Deleting build directory..."
@@ -50,6 +60,7 @@ remove_build_and_dist() {
     fi
 }
 
+# Function to check if the version exists on PYPI
 check_version_file(){
     # Fetch package versions from Test PyPI
     pypi_versions=$(curl -sSL https://pypi.org/simple/${PACKAGE_NAME}/ | grep -o '<a [^>]*>.*</a>' | sed -e 's/<[^>]*>//g')
@@ -62,7 +73,7 @@ check_version_file(){
     fi
 }
 
-# check existance of .pypi
+# Function to check existance of .pypi
 set_local_prod_pypi_token() {
     # Check if the token file exists
     if [ -e "./$PYPI_FILE" ]; then
@@ -72,6 +83,7 @@ set_local_prod_pypi_token() {
     fi
 }
 
+# Function to check PROD_PYPI_TOKEN
 check_prod_pypi_env() {
     if [[ -n "$PROD_PYPI_TOKEN" && "$PROD_PYPI_TOKEN" == pypi-* ]]; then
         return 0
@@ -80,6 +92,7 @@ check_prod_pypi_env() {
     fi
 }
 
+# Function to publish the code to PYPI
 publish() {
     set_local_prod_pypi_token
 
@@ -120,6 +133,7 @@ publish() {
     fi
 }
 
+# Function to check code quality
 check_code(){
     if check_venv; then
         source .venv/bin/activate
@@ -182,8 +196,6 @@ check_code(){
     fi
 }
 
-
-
 show_usage() {
     echo "Usage: $0 {check|publish}"
     exit 1
@@ -195,7 +207,7 @@ if [ $# -lt 1 ]; then
     exit 1
 fi
 
-# Handle different arguments
+# Main scipt entry
 case "$1" in
     check)
         check_code
