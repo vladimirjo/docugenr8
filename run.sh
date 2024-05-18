@@ -69,8 +69,6 @@ set_local_prod_pypi_token() {
         # Read the token from the file
         success "Local token file "./$PYPI_FILE" is used to set PROD_PYPI_TOKEN."
         export PROD_PYPI_TOKEN=$(cat "./$PYPI_FILE")
-    else
-        warning "Token file '$PYPI_FILE' does not exist in directory."
     fi
 }
 
