@@ -7,8 +7,8 @@ docugenr8 is a Python library designed to help you generate various types of doc
 - **Simple Global Settings**: Easily change global settings such as colors, fonts, and font sizes. No need to redefine these settings each time; the most recent settings are automatically applied to all new elements.
 - **Effortless Text Box Creation**: Create text boxes without worrying about text line placement. Text box horizontal alignment options: right, centered, left, and justified. Text box vertical alignment options: top, bottom, center, justified-between-lines, and justified-between-paragraphs.
 - **Advanced Paragraph Formatting**: Customize paragraph formatting with options like line height, tab size, word splitting, and indents.
-- **Page Numbers**: Insert page numbers (current page and total pages) anywhere in the text box. Choose from different numbering styles such as Arabic, Roman, etc.
-- **Linked Text Boxes**: Link text boxes together for continuous text flow, similar to writing in a Word document.
+- **Page Numbers**: Insert page numbers (current page and total pages) anywhere in the text box. Use the standard numbering style or add a custom to match your need, like Roman.
+- **Linked Text Boxes**: Link text boxes together for continuous text flow. Create text boxes that span multiple pages, or write text in two or more columns on a single page.
 - **Table Creation and Customization**: Easily create and fill tables. Customize cell and border colors individually or by rows and columns.
 - **PDF Optimization**: Significantly reduce document size (up to 40 times) with font subsetting.
 - **Minimal Dependencies**: Currently, it only depends on fonttools. Work is underway to make it a zero-dependency library.
@@ -50,23 +50,32 @@ Create a PDF document with a text box and a table.
 Create a file main.py with:
 
 ```python
-from docugenr8.core import Document, TextBox, Table
-from docugenr8.pdf import PDFGenerator
+from docugenr8.document import Document
 
 # Create a new document
 doc = Document()
 
-# Add a text box
-text_box = TextBox(x=50, y=700, width=500, height=100, text="Hello, World!", font_size=12)
-doc.add_text_box(text_box)
+# Add a font to the document, and define the name and location
+# This will automatically select the font for further use
+doc.add_font("calibri", "./fonts/calibri.ttf")
 
-# Add a table
-table = Table(x=50, y=500, width=500, height=200, rows=5, columns=3)
-doc.add_table(table)
+# Add a page to the document. A4 has a standard width of 595.2 pixels and a height of 843.04.
+doc.add_page(width=595.2, height=842.04)
 
-# Generate PDF
-pdf_gen = PDFGenerator()
-pdf_gen.generate(doc, "output.pdf")
+# Change the font size
+doc.settings.font_size = 14
+
+# Create a text area with location and dimensions
+text_area = doc.create_textarea(x=50, y=50, width=100, height=100)
+
+# Add some text to the text area
+text_area.add_text("The quick brown fox jumped over the lazy dog. 1234567890")
+
+# Add the text area to the first page of the document
+doc.pages[0].add_content(text_area)
+
+# Output to pdf file
+doc.output_to_file("pdf", "output.pdf")
 ```
 
 ## Usage
