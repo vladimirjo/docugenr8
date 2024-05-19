@@ -11,6 +11,7 @@ docugenr8 is a Python library designed to help you generate various types of doc
 - **Linked Text Boxes**: Link text boxes together for continuous text flow, similar to writing in a Word document.
 - **Table Creation and Customization**: Easily create and fill tables. Customize cell and border colors individually or by rows and columns.
 - **PDF Optimization**: Significantly reduce document size (up to 40 times) with font subsetting.
+- **Minimal Dependencies**: Currently, it only depends on fonttools. Work is underway to make it a zero-dependency library.
 
 ## Structure
 
