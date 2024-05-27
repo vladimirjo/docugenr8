@@ -5,10 +5,18 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "docugenr8"
 authors = [{ name = "Vladimir Jovanovic", email = "vladimirjo@protonmail.com" }]
-description = "Library for document creating"
+description = """Generates document with fonts, images, and elements using a coordinate system."""
 readme = "README.md"
 requires-python = ">=3.10"
-keywords = []
+keywords = [
+    "document-generation",
+    "PDF",
+    "font-customization",
+    "image-integration",
+    "coordinate-system",
+    "text-formatting",
+    "python"
+]
 license = { text = "MIT" }
 classifiers = ["Programming Language :: Python :: 3"]
 dependencies = ["docugenr8-core>=0.0.0,<1.0.0", "docugenr8-pdf>=0.0.0,<1.0.0"]
