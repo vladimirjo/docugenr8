@@ -3,7 +3,7 @@
 DOCUGENR8_SHARED="../docugenr8-shared"
 DOCUGENR8_CORE="../docugenr8-core"
 DOCUGENR8_PDF="../docugenr8-pdf"
-LOCAL_DEV=1
+LOCAL_DEV=false
 
 # Function to check if Python 3.10 is installed
 check_python_version() {
@@ -53,7 +53,7 @@ setup() {
     # Install dev requirements from pyproject.toml
     python3.10 -m pip install -e ".[dev]"
 
-    if $LOCAL_DEV; then
+    if [[ "$LOCAL_DEV" == "true" ]]; then
         python3.10 -m pip install -e $DOCUGENR8_SHARED
         python3.10 -m pip install -e $DOCUGENR8_CORE
         python3.10 -m pip install -e $DOCUGENR8_PDF
@@ -89,7 +89,7 @@ case "$1" in
         setup
         ;;
     local)
-        LOCAL_DEV=0
+        LOCAL_DEV=true
         setup
         ;;
     *)
