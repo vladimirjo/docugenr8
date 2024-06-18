@@ -3,12 +3,14 @@
 DOCUGENR8_SHARED="../docugenr8-shared"
 DOCUGENR8_CORE="../docugenr8-core"
 DOCUGENR8_PDF="../docugenr8-pdf"
+LOCAL_DEV=1
 
 # Function to check if Python 3.10 is installed
 check_python_version() {
     if command -v python3.10 &> /dev/null; then
         # Python 3.10 command is available, now check the version
-        local python_version=$(python3.10 --version 2>&1)
+        local python_version
+        python_version=$(python3.10 --version 2>&1)
         if [[ $python_version == "Python 3.10"* ]]; then
             echo "Python 3.10 is installed: $python_version"
             return 0
@@ -31,7 +33,7 @@ check_venv() {
     fi
 }
 
-setup_remote() {
+setup() {
     # Install Python 3.10
     if ! check_python_version; then
         sudo apt update
@@ -45,23 +47,22 @@ setup_remote() {
     if ! check_venv; then
         python3.10 -m venv .venv
     fi
+    # shellcheck source=/dev/null
     source .venv/bin/activate
 
     # Install dev requirements from pyproject.toml
     python3.10 -m pip install -e ".[dev]"
 
+    if $LOCAL_DEV; then
+        python3.10 -m pip install -e $DOCUGENR8_SHARED
+        python3.10 -m pip install -e $DOCUGENR8_CORE
+        python3.10 -m pip install -e $DOCUGENR8_PDF
+    fi
+
     # Deactivate venv
     if check_venv; then
         deactivate
     fi
-}
-
-setup_local(){
-    remote
-    # Swap the remote dependencies with local directories
-    python3.10 -m pip install -e $docugenr8_shared
-    python3.10 -m pip install -e $docugenr8_core
-    python3.10 -m pip install -e $docugenr8_pdf
 
     # Start VSCode
     if command -v code &> /dev/null
@@ -80,16 +81,16 @@ show_usage() {
 # Check if at least one argument is passed
 if [ $# -lt 1 ]; then
     show_usage
-    exit 1
 fi
 
 # Handle different arguments
 case "$1" in
     remote)
-        setup_remote
+        setup
         ;;
     local)
-        setup_local
+        LOCAL_DEV=0
+        setup
         ;;
     *)
         echo "Invalid option: $1"
