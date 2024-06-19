@@ -11,6 +11,7 @@ from docugenr8_core import Document as CoreDocument
 from docugenr8_core.page import Page as CorePage
 from docugenr8_core.settings import Settings as CoreSettings
 from docugenr8_core.text_area import TextArea as CoreTextArea
+from docugenr8_core.text_box import TextBox as CoreTextBox
 from docugenr8_pdf.pdf import Pdf
 
 
@@ -58,6 +59,15 @@ class Document:
     ) -> TextArea:
         text_area = TextArea(x, y, width, height, self.__core_document)
         return text_area
+
+    def create_textbox(
+        self,
+        x: float,
+        y: float,
+        width: float,
+        height: float,
+    ) -> TextBox:
+        return TextBox(x, y, width, height, self.__core_document)
 
     def output_to_bytes(
         self,
@@ -235,6 +245,114 @@ class Settings:
     def page_num_presentation(self, presentation: Callable[[int], str]):
         self.__core_settings.page_num_presentation = presentation
 
+    # self.fill_color: tuple[int, int, int] = (255, 255, 255)  # white color 255, 255, 255
+    @property
+    def fill_color(self):
+        return self.__core_settings.fill_color
+
+    @fill_color.setter
+    def fill_color(self, color: tuple[int, int, int]):
+        self.__core_settings.fill_color = color
+
+    # self.line_color: tuple[int, int, int] = (0, 0, 0)  # black color 0, 0, 0
+    @property
+    def line_color(self):
+        return self.__core_settings.line_color
+
+    @line_color.setter
+    def line_color(self, color: tuple[int, int, int]):
+        self.__core_settings.line_color = color
+
+    # self.line_width: float = 1.0
+    @property
+    def line_width(self):
+        return self.__core_settings.line_width
+
+    @line_width.setter
+    def line_width(self, width: float):
+        self.__core_settings.line_width = width
+
+    # self.line_pattern: tuple[int, int, int, int, int] = (0, 0, 0, 0, 0)
+    @property
+    def line_pattern(self):
+        return self.__core_settings.line_pattern
+
+    @line_pattern.setter
+    def line_pattern(self, pattern: tuple[int, int, int, int, int]):
+        self.__core_settings.line_pattern = pattern
+
+    # self.textbox_padding_left: float = 0.0
+    @property
+    def textbox_padding_left(self):
+        return self.__core_settings.textbox_padding_left
+
+    @textbox_padding_left.setter
+    def textbox_padding_left(self, padding: float):
+        self.__core_settings.textbox_padding_left = padding
+
+    # self.textbox_padding_right: float = 0.0
+    @property
+    def textbox_padding_right(self):
+        return self.__core_settings.textbox_padding_right
+
+    @textbox_padding_right.setter
+    def textbox_padding_right(self, padding: float):
+        self.__core_settings.textbox_padding_right = padding
+
+    # self.textbox_padding_top: float = 0.0
+    @property
+    def textbox_padding_top(self):
+        return self.__core_settings.textbox_padding_top
+
+    @textbox_padding_top.setter
+    def textbox_padding_top(self, padding: float):
+        self.__core_settings.textbox_padding_top = padding
+
+    # self.textbox_padding_bottom: float = 0.0
+    @property
+    def textbox_padding_bottom(self):
+        return self.__core_settings.textbox_padding_bottom
+
+    @textbox_padding_bottom.setter
+    def textbox_padding_bottom(self, padding: float):
+        self.__core_settings.textbox_padding_bottom = padding
+
+    # self.textbox_margin_left: float = 0.0
+    @property
+    def textbox_margin_left(self):
+        return self.__core_settings.textbox_margin_left
+
+    @textbox_margin_left.setter
+    def textbox_margin_left(self, margin: float):
+        self.__core_settings.textbox_margin_left = margin
+
+    # self.textbox_margin_right: float = 0.0
+    @property
+    def textbox_margin_right(self):
+        return self.__core_settings.textbox_margin_right
+
+    @textbox_margin_right.setter
+    def textbox_margin_right(self, margin: float):
+        self.__core_settings.textbox_margin_right = margin
+
+    # self.textbox_margin_top: float = 0.0
+    @property
+    def textbox_margin_top(self):
+        return self.__core_settings.textbox_margin_top
+
+    @textbox_margin_top.setter
+    def textbox_margin_top(self, margin: float):
+        self.__core_settings.textbox_margin_top = margin
+
+    # self.textbox_margin_bottom: float = 0.0
+    @property
+    def textbox_margin_bottom(self):
+        return self.__core_settings.textbox_margin_bottom
+
+    @textbox_margin_bottom.setter
+    def textbox_margin_bottom(self, margin: float):
+        self.__core_settings.textbox_margin_bottom = margin
+
 
 class Page:
     def __init__(
@@ -264,6 +382,8 @@ class Page:
         content: object,
     ) -> None:
         if isinstance(content, TextArea):
+            self.__core_page.add_content(content._get_core())
+        if isinstance(content, TextBox):
             self.__core_page.add_content(content._get_core())
 
 
@@ -305,3 +425,21 @@ class TextArea:
         new_width: float,
     ) -> None:
         self.__core_text_area.set_width(new_width)
+
+
+class TextBox:
+    def __init__(
+        self,
+        x: float,
+        y: float,
+        width: float,
+        height: float,
+        core_document: CoreDocument,
+    ) -> None:
+        self.__core_text_box = core_document.create_textbox(x, y, width, height)
+
+    def add_text(self, unicode_text: str) -> None:
+        self.__core_text_box.add_text(unicode_text)
+
+    def _get_core(self) -> CoreTextBox:
+        return self.__core_text_box
