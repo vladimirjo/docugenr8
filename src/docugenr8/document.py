@@ -10,6 +10,7 @@ from collections.abc import Callable
 from docugenr8_core import Document as CoreDocument
 from docugenr8_core.page import Page as CorePage
 from docugenr8_core.settings import Settings as CoreSettings
+from docugenr8_core.shapes import Curve as CoreCurve
 from docugenr8_core.text_area import TextArea as CoreTextArea
 from docugenr8_core.text_box import TextBox as CoreTextBox
 from docugenr8_pdf.pdf import Pdf
@@ -69,13 +70,16 @@ class Document:
     ) -> TextBox:
         return TextBox(x, y, width, height, self.__core_document)
 
+    def create_curve(self, x: float, y: float):
+        return Curve(x, y, self.__core_document)
+
     def output_to_bytes(
         self,
         file_format: str,
     ) -> bytes:
         match file_format:
             case "pdf":
-                dto = self.__core_document._build_dto()
+                dto = self.__core_document.build_dto()
                 return Pdf(dto).output_to_bytes()
             case _:
                 raise NotImplementedError("Not supported file format.")
@@ -353,6 +357,14 @@ class Settings:
     def textbox_margin_bottom(self, margin: float):
         self.__core_settings.textbox_margin_bottom = margin
 
+    @property
+    def line_closed(self):
+        return self.__core_settings.line_closed
+
+    @line_closed.setter
+    def line_closed(self, value: bool):
+        self.__core_settings.line_closed = value
+
 
 class Page:
     def __init__(
@@ -384,6 +396,8 @@ class Page:
         if isinstance(content, TextArea):
             self.__core_page.add_content(content._get_core())
         if isinstance(content, TextBox):
+            self.__core_page.add_content(content._get_core())
+        if isinstance(content, Curve):
             self.__core_page.add_content(content._get_core())
 
 
@@ -443,3 +457,29 @@ class TextBox:
 
     def _get_core(self) -> CoreTextBox:
         return self.__core_text_box
+
+
+class Curve:
+    def __init__(self, x: float, y: float, core_document: CoreDocument) -> None:
+        self.__core_curve = core_document.create_curve(x, y)
+
+    def _get_core(self) -> CoreCurve:
+        return self.__core_curve
+
+    def add_point(
+        self,
+        x: float,
+        y: float,
+    ) -> None:
+        self.__core_curve.add_point(x, y)
+
+    def add_bezier(
+        self,
+        cp1_x: float,
+        cp1_y: float,
+        cp2_x: float,
+        cp2_y: float,
+        endp_x: float,
+        endp_y: float,
+    ) -> None:
+        self.__core_curve.add_bezier(cp1_x, cp1_y, cp2_x, cp2_y, endp_x, endp_y)
