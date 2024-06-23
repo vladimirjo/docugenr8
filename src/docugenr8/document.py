@@ -10,7 +10,10 @@ from collections.abc import Callable
 from docugenr8_core import Document as CoreDocument
 from docugenr8_core.page import Page as CorePage
 from docugenr8_core.settings import Settings as CoreSettings
+from docugenr8_core.shapes import Arc as CoreArc
 from docugenr8_core.shapes import Curve as CoreCurve
+from docugenr8_core.shapes import Rectangle as CoreRectangle
+from docugenr8_core.shapes import Ellipse as CoreEllipse
 from docugenr8_core.text_area import TextArea as CoreTextArea
 from docugenr8_core.text_box import TextBox as CoreTextBox
 from docugenr8_pdf.pdf import Pdf
@@ -72,6 +75,53 @@ class Document:
 
     def create_curve(self, x: float, y: float):
         return Curve(x, y, self.__core_document)
+
+    def create_rectangle(
+        self,
+        x: float,
+        y: float,
+        width: float,
+        height: float,
+        rotate: float = 0,
+        skew: float = 0,
+        rounded_corner_top_left: float = 0,
+        rounded_corner_top_right: float = 0,
+        rounded_corner_bottom_right: float = 0,
+        rounded_corner_bottom_left: float = 0,
+    ) -> Rectangle:
+        return Rectangle(
+            x,
+            y,
+            width,
+            height,
+            rotate,
+            skew,
+            rounded_corner_top_left,
+            rounded_corner_top_right,
+            rounded_corner_bottom_right,
+            rounded_corner_bottom_left,
+            self.__core_document,
+        )
+
+    def create_arc(
+        self,
+        x1: float,
+        y1: float,
+        x2: float,
+        y2: float,
+    ) -> Arc:
+        return Arc(x1, y1, x2, y2, self.__core_document)
+
+    def create_ellipse(
+        self,
+        x: float,
+        y: float,
+        width: float,
+        height: float,
+        rotate: float = 0,
+        skew: float = 0,
+    ) -> Ellipse:
+        return Ellipse(x, y, width, height, rotate, skew, self.__core_document)
 
     def output_to_bytes(
         self,
@@ -393,12 +443,21 @@ class Page:
         self,
         content: object,
     ) -> None:
-        if isinstance(content, TextArea):
-            self.__core_page.add_content(content._get_core())
-        if isinstance(content, TextBox):
-            self.__core_page.add_content(content._get_core())
-        if isinstance(content, Curve):
-            self.__core_page.add_content(content._get_core())
+        match content:
+            case TextArea():
+                self.__core_page.add_content(content._get_core())
+            case TextBox():
+                self.__core_page.add_content(content._get_core())
+            case Curve():
+                self.__core_page.add_content(content._get_core())
+            case Rectangle():
+                self.__core_page.add_content(content._get_core())
+            case Arc():
+                self.__core_page.add_content(content._get_core())
+            case Ellipse():
+                self.__core_page.add_content(content._get_core())
+            case _:
+                raise ValueError("Type not defined in main module.")
 
 
 class DocAttributes:
@@ -483,3 +542,117 @@ class Curve:
         endp_y: float,
     ) -> None:
         self.__core_curve.add_bezier(cp1_x, cp1_y, cp2_x, cp2_y, endp_x, endp_y)
+
+
+class Rectangle:
+    def __init__(
+        self,
+        x: float,
+        y: float,
+        width: float,
+        height: float,
+        rotate: float,
+        skew: float,
+        rounded_corner_top_left: float,
+        rounded_corner_top_right: float,
+        rounded_corner_bottom_left: float,
+        rounded_corner_bottom_right: float,
+        core_document: CoreDocument,
+    ) -> None:
+        self.__core_rectangle = CoreRectangle(
+            x,
+            y,
+            width,
+            height,
+            rotate,
+            skew,
+            rounded_corner_top_left,
+            rounded_corner_top_right,
+            rounded_corner_bottom_left,
+            rounded_corner_bottom_right,
+            core_document,
+        )
+
+    @property
+    def rounded_corners_all(self) -> tuple[float, float, float, float]:
+        result = (
+            self.__core_rectangle._dto_rectangle.rounded_corner_top_left,
+            self.__core_rectangle._dto_rectangle.rounded_corner_top_right,
+            self.__core_rectangle._dto_rectangle.rounded_corner_bottom_right,
+            self.__core_rectangle._dto_rectangle.rounded_corner_bottom_left,
+        )
+        return result
+
+    @rounded_corners_all.setter
+    def rounded_corners_all(self, value: float):
+        self.__core_rectangle._dto_rectangle.rounded_corner_top_left = value
+        self.__core_rectangle._dto_rectangle.rounded_corner_top_right = value
+        self.__core_rectangle._dto_rectangle.rounded_corner_bottom_right = value
+        self.__core_rectangle._dto_rectangle.rounded_corner_bottom_left = value
+
+    @property
+    def rounded_corner_top_left(self) -> float:
+        return self.__core_rectangle._dto_rectangle.rounded_corner_top_left
+
+    @rounded_corner_top_left.setter
+    def rounded_corner_top_left(self, value: float):
+        self.__core_rectangle._dto_rectangle.rounded_corner_top_left = value
+
+    @property
+    def rounded_corner_top_right(self) -> float:
+        return self.__core_rectangle._dto_rectangle.rounded_corner_top_right
+
+    @rounded_corner_top_right.setter
+    def rounded_corner_top_right(self, value: float):
+        self.__core_rectangle._dto_rectangle.rounded_corner_top_right = value
+
+    @property
+    def rounded_corner_bottom_right(self) -> float:
+        return self.__core_rectangle._dto_rectangle.rounded_corner_bottom_right
+
+    @rounded_corner_bottom_right.setter
+    def rounded_corner_bottom_right(self, value: float):
+        self.__core_rectangle._dto_rectangle.rounded_corner_bottom_right = value
+
+    @property
+    def rounded_corner_bottom_left(self) -> float:
+        return self.__core_rectangle._dto_rectangle.rounded_corner_bottom_left
+
+    @rounded_corner_bottom_left.setter
+    def rounded_corner_bottom_left(self, value: float):
+        self.__core_rectangle._dto_rectangle.rounded_corner_bottom_left = value
+
+    def _get_core(self) -> CoreRectangle:
+        return self.__core_rectangle
+
+
+class Arc:
+    def __init__(
+        self,
+        x1: float,
+        y1: float,
+        x2: float,
+        y2: float,
+        core_document: CoreDocument,
+    ) -> None:
+        self.__core_arc = CoreArc(x1, y1, x2, y2, core_document)
+
+    def _get_core(self) -> CoreArc:
+        return self.__core_arc
+
+
+class Ellipse:
+    def __init__(
+        self,
+        x: float,
+        y: float,
+        width: float,
+        height: float,
+        rotate: float,
+        skew: float,
+        core_document: CoreDocument,
+    ) -> None:
+        self.__core_ellipse = CoreEllipse(x, y, width, height, rotate, skew, core_document)
+
+    def _get_core(self) -> CoreEllipse:
+        return self.__core_ellipse
