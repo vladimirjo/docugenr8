@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from docugenr8_core.settings import Settings as CoreSettings
+    from docugenr8_core import Settings as CoreSettings
 
 
 from collections.abc import Callable

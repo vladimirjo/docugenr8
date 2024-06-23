@@ -9,6 +9,8 @@ if TYPE_CHECKING:
 from docugenr8_core.shapes import Arc as CoreArc
 from docugenr8_core.shapes import Curve as CoreCurve
 from docugenr8_core.shapes import Ellipse as CoreEllipse
+from docugenr8_core.shapes import Rotation as CoreRotation
+from docugenr8_core.shapes import Skew as CoreSkew
 from docugenr8_core.shapes import Rectangle as CoreRectangle
 from docugenr8_core.text_area import TextArea as CoreTextArea
 from docugenr8_core.text_box import TextBox as CoreTextBox
@@ -90,6 +92,23 @@ class Curve:
     ) -> None:
         self.__core_curve.add_bezier(cp1_x, cp1_y, cp2_x, cp2_y, endp_x, endp_y)
 
+    def add_rotation(
+        self,
+        x_origin: float,
+        y_origin: float,
+        degrees: float,
+    ):
+        self.__core_curve.transformations.append(CoreRotation(x_origin, y_origin, degrees))
+
+    def add_skew(
+        self,
+        x_origin: float,
+        y_origin: float,
+        vertical_degrees: float,
+        horizontal_degrees: float,
+    ):
+        self.__core_curve.transformations.append(CoreSkew(x_origin, y_origin, vertical_degrees, horizontal_degrees))
+
 
 class Rectangle:
     def __init__(
@@ -98,8 +117,6 @@ class Rectangle:
         y: float,
         width: float,
         height: float,
-        rotate: float,
-        skew: float,
         rounded_corner_top_left: float,
         rounded_corner_top_right: float,
         rounded_corner_bottom_left: float,
@@ -111,8 +128,6 @@ class Rectangle:
             y,
             width,
             height,
-            rotate,
-            skew,
             rounded_corner_top_left,
             rounded_corner_top_right,
             rounded_corner_bottom_left,
@@ -169,6 +184,23 @@ class Rectangle:
     def rounded_corner_bottom_left(self, value: float):
         self.__core_rectangle.rounded_corner_bottom_left = value
 
+    def add_rotation(
+        self,
+        x_origin: float,
+        y_origin: float,
+        degrees: float,
+    ):
+        self.__core_rectangle.transformations.append(CoreRotation(x_origin, y_origin, degrees))
+
+    def add_skew(
+        self,
+        x_origin: float,
+        y_origin: float,
+        vertical_degrees: float,
+        horizontal_degrees: float,
+    ):
+        self.__core_rectangle.transformations.append(CoreSkew(x_origin, y_origin, vertical_degrees, horizontal_degrees))
+
     def _get_core(self) -> CoreRectangle:
         return self.__core_rectangle
 
@@ -184,6 +216,23 @@ class Arc:
     ) -> None:
         self.__core_arc = CoreArc(x1, y1, x2, y2, core_document)
 
+    def add_rotation(
+        self,
+        x_origin: float,
+        y_origin: float,
+        degrees: float,
+    ):
+        self.__core_arc.transformations.append(CoreRotation(x_origin, y_origin, degrees))
+
+    def add_skew(
+        self,
+        x_origin: float,
+        y_origin: float,
+        vertical_degrees: float,
+        horizontal_degrees: float,
+    ):
+        self.__core_arc.transformations.append(CoreSkew(x_origin, y_origin, vertical_degrees, horizontal_degrees))
+
     def _get_core(self) -> CoreArc:
         return self.__core_arc
 
@@ -195,11 +244,26 @@ class Ellipse:
         y: float,
         width: float,
         height: float,
-        rotate: float,
-        skew: float,
         core_document: CoreDocument,
     ) -> None:
-        self.__core_ellipse = CoreEllipse(x, y, width, height, rotate, skew, core_document)
+        self.__core_ellipse = CoreEllipse(x, y, width, height, core_document)
+
+    def add_rotation(
+        self,
+        x_origin: float,
+        y_origin: float,
+        degrees: float,
+    ):
+        self.__core_ellipse.transformations.append(CoreRotation(x_origin, y_origin, degrees))
+
+    def add_skew(
+        self,
+        x_origin: float,
+        y_origin: float,
+        vertical_degrees: float,
+        horizontal_degrees: float,
+    ):
+        self.__core_ellipse.transformations.append(CoreSkew(x_origin, y_origin, vertical_degrees, horizontal_degrees))
 
     def _get_core(self) -> CoreEllipse:
         return self.__core_ellipse

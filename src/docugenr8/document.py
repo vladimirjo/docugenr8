@@ -6,8 +6,8 @@
 from __future__ import annotations
 
 from docugenr8_core import Document as CoreDocument
-from docugenr8_core.page import Page as CorePage
-from docugenr8_pdf.pdf import Pdf
+from docugenr8_core import Page as CorePage
+from docugenr8_pdf import Pdf
 
 from docugenr8.contents import Arc
 from docugenr8.contents import Curve
@@ -81,8 +81,6 @@ class Document:
         y: float,
         width: float,
         height: float,
-        rotate: float = 0,
-        skew: float = 0,
         rounded_corner_top_left: float = 0,
         rounded_corner_top_right: float = 0,
         rounded_corner_bottom_right: float = 0,
@@ -93,8 +91,6 @@ class Document:
             y,
             width,
             height,
-            rotate,
-            skew,
             rounded_corner_top_left,
             rounded_corner_top_right,
             rounded_corner_bottom_right,
@@ -120,7 +116,7 @@ class Document:
         rotate: float = 0,
         skew: float = 0,
     ) -> Ellipse:
-        return Ellipse(x, y, width, height, rotate, skew, self.__core_document)
+        return Ellipse(x, y, width, height, self.__core_document)
 
     def output_to_bytes(
         self,
