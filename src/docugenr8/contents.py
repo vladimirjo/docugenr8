@@ -123,51 +123,51 @@ class Rectangle:
     @property
     def rounded_corners_all(self) -> tuple[float, float, float, float]:
         result = (
-            self.__core_rectangle._dto_rectangle.rounded_corner_top_left,
-            self.__core_rectangle._dto_rectangle.rounded_corner_top_right,
-            self.__core_rectangle._dto_rectangle.rounded_corner_bottom_right,
-            self.__core_rectangle._dto_rectangle.rounded_corner_bottom_left,
+            self.__core_rectangle.rounded_corner_top_left,
+            self.__core_rectangle.rounded_corner_top_right,
+            self.__core_rectangle.rounded_corner_bottom_right,
+            self.__core_rectangle.rounded_corner_bottom_left,
         )
         return result
 
     @rounded_corners_all.setter
     def rounded_corners_all(self, value: float):
-        self.__core_rectangle._dto_rectangle.rounded_corner_top_left = value
-        self.__core_rectangle._dto_rectangle.rounded_corner_top_right = value
-        self.__core_rectangle._dto_rectangle.rounded_corner_bottom_right = value
-        self.__core_rectangle._dto_rectangle.rounded_corner_bottom_left = value
+        self.__core_rectangle.rounded_corner_top_left = value
+        self.__core_rectangle.rounded_corner_top_right = value
+        self.__core_rectangle.rounded_corner_bottom_right = value
+        self.__core_rectangle.rounded_corner_bottom_left = value
 
     @property
     def rounded_corner_top_left(self) -> float:
-        return self.__core_rectangle._dto_rectangle.rounded_corner_top_left
+        return self.__core_rectangle.rounded_corner_top_left
 
     @rounded_corner_top_left.setter
     def rounded_corner_top_left(self, value: float):
-        self.__core_rectangle._dto_rectangle.rounded_corner_top_left = value
+        self.__core_rectangle.rounded_corner_top_left = value
 
     @property
     def rounded_corner_top_right(self) -> float:
-        return self.__core_rectangle._dto_rectangle.rounded_corner_top_right
+        return self.__core_rectangle.rounded_corner_top_right
 
     @rounded_corner_top_right.setter
     def rounded_corner_top_right(self, value: float):
-        self.__core_rectangle._dto_rectangle.rounded_corner_top_right = value
+        self.__core_rectangle.rounded_corner_top_right = value
 
     @property
     def rounded_corner_bottom_right(self) -> float:
-        return self.__core_rectangle._dto_rectangle.rounded_corner_bottom_right
+        return self.__core_rectangle.rounded_corner_bottom_right
 
     @rounded_corner_bottom_right.setter
     def rounded_corner_bottom_right(self, value: float):
-        self.__core_rectangle._dto_rectangle.rounded_corner_bottom_right = value
+        self.__core_rectangle.rounded_corner_bottom_right = value
 
     @property
     def rounded_corner_bottom_left(self) -> float:
-        return self.__core_rectangle._dto_rectangle.rounded_corner_bottom_left
+        return self.__core_rectangle.rounded_corner_bottom_left
 
     @rounded_corner_bottom_left.setter
     def rounded_corner_bottom_left(self, value: float):
-        self.__core_rectangle._dto_rectangle.rounded_corner_bottom_left = value
+        self.__core_rectangle.rounded_corner_bottom_left = value
 
     def _get_core(self) -> CoreRectangle:
         return self.__core_rectangle

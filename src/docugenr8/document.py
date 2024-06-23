@@ -128,23 +128,19 @@ class Document:
     ) -> bytes:
         match file_format:
             case "pdf":
-                dto = self.__core_document.build_dto()
+                dto = self.__core_document.export("dto")
                 return Pdf(dto).output_to_bytes()
             case _:
                 raise NotImplementedError("Not supported file format.")
 
     def output_to_file(
         self,
-        file_format: str,
         file_name: str,
+        file_format: str = "pdf",
     ) -> None:
-        match file_format:
-            case "pdf":
-                b = self.output_to_bytes(file_format)
-                with open(file_name, "wb") as f:
-                    f.write(b)
-            case _:
-                raise NotImplementedError("Not supported file format.")
+        b = self.output_to_bytes(file_format)
+        with open(file_name, "wb") as f:
+            f.write(b)
 
 
 class Page:
@@ -174,21 +170,10 @@ class Page:
         self,
         content: object,
     ) -> None:
-        match content:
-            case TextArea():
-                self.__core_page.add_content(content._get_core())
-            case TextBox():
-                self.__core_page.add_content(content._get_core())
-            case Curve():
-                self.__core_page.add_content(content._get_core())
-            case Rectangle():
-                self.__core_page.add_content(content._get_core())
-            case Arc():
-                self.__core_page.add_content(content._get_core())
-            case Ellipse():
-                self.__core_page.add_content(content._get_core())
-            case _:
-                raise ValueError("Type not defined in main module.")
+        if hasattr(content, "_get_core") and callable(getattr(content, "_get_core")):  # noqa: B009
+            self.__core_page.add_content(content._get_core())  # type: ignore
+        else:
+            raise ValueError(f"The content {content.__class__.__name__} must have a _get_core() method.")
 
 
 class DocAttributes:
