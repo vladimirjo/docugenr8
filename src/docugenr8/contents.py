@@ -9,9 +9,9 @@ if TYPE_CHECKING:
 from docugenr8_core.shapes import Arc as CoreArc
 from docugenr8_core.shapes import Curve as CoreCurve
 from docugenr8_core.shapes import Ellipse as CoreEllipse
+from docugenr8_core.shapes import Rectangle as CoreRectangle
 from docugenr8_core.shapes import Rotation as CoreRotation
 from docugenr8_core.shapes import Skew as CoreSkew
-from docugenr8_core.shapes import Rectangle as CoreRectangle
 from docugenr8_core.text_area import TextArea as CoreTextArea
 from docugenr8_core.text_box import TextBox as CoreTextBox
 
@@ -68,8 +68,26 @@ class TextBox:
 
 
 class Curve:
-    def __init__(self, x: float, y: float, core_document: CoreDocument) -> None:
-        self.__core_curve = core_document.create_curve(x, y)
+    def __init__(
+        self,
+        x: float,
+        y: float,
+        closed: bool,
+        fill_color: tuple[int, int, int] | None | bool,
+        line_color: tuple[int, int, int] | None | bool,
+        line_width: float | None,
+        line_pattern: tuple[int, int, int, int, int] | None,
+        core_doc: CoreDocument,
+    ) -> None:
+        self.__core_curve = core_doc.create_curve(
+            x,
+            y,
+            closed,
+            fill_color,
+            line_color,
+            line_width,
+            line_pattern,
+        )
 
     def _get_core(self) -> CoreCurve:
         return self.__core_curve
@@ -117,22 +135,21 @@ class Rectangle:
         y: float,
         width: float,
         height: float,
-        rounded_corner_top_left: float,
-        rounded_corner_top_right: float,
-        rounded_corner_bottom_left: float,
-        rounded_corner_bottom_right: float,
-        core_document: CoreDocument,
+        fill_color: tuple[int, int, int] | None | bool,
+        line_color: tuple[int, int, int] | None | bool,
+        line_width: float | None,
+        line_pattern: tuple[int, int, int, int, int] | None,
+        core_doc: CoreDocument,
     ) -> None:
-        self.__core_rectangle = CoreRectangle(
+        self.__core_rectangle = core_doc.create_rectangle(
             x,
             y,
             width,
             height,
-            rounded_corner_top_left,
-            rounded_corner_top_right,
-            rounded_corner_bottom_left,
-            rounded_corner_bottom_right,
-            core_document,
+            fill_color,
+            line_color,
+            line_width,
+            line_pattern,
         )
 
     @property
@@ -212,9 +229,20 @@ class Arc:
         y1: float,
         x2: float,
         y2: float,
+        line_color: tuple[int, int, int] | None | bool,
+        line_width: float | None,
+        line_pattern: tuple[int, int, int, int, int] | None,
         core_document: CoreDocument,
     ) -> None:
-        self.__core_arc = CoreArc(x1, y1, x2, y2, core_document)
+        self.__core_arc = core_document.create_arc(
+            x1,
+            y1,
+            x2,
+            y2,
+            line_color,
+            line_width,
+            line_pattern,
+        )
 
     def add_rotation(
         self,
@@ -244,9 +272,22 @@ class Ellipse:
         y: float,
         width: float,
         height: float,
-        core_document: CoreDocument,
+        fill_color: tuple[int, int, int] | None | bool,
+        line_color: tuple[int, int, int] | None | bool,
+        line_width: float | None,
+        line_pattern: tuple[int, int, int, int, int] | None,
+        core_doc: CoreDocument,
     ) -> None:
-        self.__core_ellipse = CoreEllipse(x, y, width, height, core_document)
+        self.__core_ellipse = core_doc.create_elipse(
+            x,
+            y,
+            width,
+            height,
+            fill_color,
+            line_color,
+            line_width,
+            line_pattern,
+        )
 
     def add_rotation(
         self,

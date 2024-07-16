@@ -72,8 +72,26 @@ class Document:
     ) -> TextBox:
         return TextBox(x, y, width, height, self.__core_document)
 
-    def create_curve(self, x: float, y: float):
-        return Curve(x, y, self.__core_document)
+    def create_curve(
+        self,
+        x: float,
+        y: float,
+        closed: bool = False,
+        fill_color: tuple[int, int, int] | None | bool = False,
+        line_color: tuple[int, int, int] | None | bool = False,
+        line_width: float | None = None,
+        line_pattern: tuple[int, int, int, int, int] | None = None,
+    ):
+        return Curve(
+            x,
+            y,
+            closed,
+            fill_color,
+            line_color,
+            line_width,
+            line_pattern,
+            self.__core_document,
+        )
 
     def create_rectangle(
         self,
@@ -81,20 +99,20 @@ class Document:
         y: float,
         width: float,
         height: float,
-        rounded_corner_top_left: float = 0,
-        rounded_corner_top_right: float = 0,
-        rounded_corner_bottom_right: float = 0,
-        rounded_corner_bottom_left: float = 0,
+        fill_color: tuple[int, int, int] | None | bool = False,
+        line_color: tuple[int, int, int] | None | bool = False,
+        line_width: float | None = None,
+        line_pattern: tuple[int, int, int, int, int] | None = None,
     ) -> Rectangle:
         return Rectangle(
             x,
             y,
             width,
             height,
-            rounded_corner_top_left,
-            rounded_corner_top_right,
-            rounded_corner_bottom_right,
-            rounded_corner_bottom_left,
+            fill_color,
+            line_color,
+            line_width,
+            line_pattern,
             self.__core_document,
         )
 
@@ -104,8 +122,20 @@ class Document:
         y1: float,
         x2: float,
         y2: float,
+        line_color: tuple[int, int, int] | None | bool = False,
+        line_width: float | None = None,
+        line_pattern: tuple[int, int, int, int, int] | None = None,
     ) -> Arc:
-        return Arc(x1, y1, x2, y2, self.__core_document)
+        return Arc(
+            x1,
+            y1,
+            x2,
+            y2,
+            line_color,
+            line_width,
+            line_pattern,
+            self.__core_document,
+        )
 
     def create_ellipse(
         self,
@@ -113,10 +143,22 @@ class Document:
         y: float,
         width: float,
         height: float,
-        rotate: float = 0,
-        skew: float = 0,
+        fill_color: tuple[int, int, int] | None | bool = False,
+        line_color: tuple[int, int, int] | None | bool = False,
+        line_width: float | None = None,
+        line_pattern: tuple[int, int, int, int, int] | None = None,
     ) -> Ellipse:
-        return Ellipse(x, y, width, height, self.__core_document)
+        return Ellipse(
+            x,
+            y,
+            width,
+            height,
+            fill_color,
+            line_color,
+            line_width,
+            line_pattern,
+            self.__core_document,
+        )
 
     def output_to_bytes(
         self,
